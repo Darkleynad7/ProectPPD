@@ -1,2 +1,10 @@
-package model;public enum DayType {
+package model;
+
+public enum DayType
+{
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY
 }
