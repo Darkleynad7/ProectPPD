@@ -3,9 +3,7 @@ package model;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Streams;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -15,7 +13,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Individual {
@@ -164,5 +163,10 @@ public class Individual {
             // pass
         }
         return List.of(this, other);
+    }
+
+    @Override
+    public String toString() {
+
     }
 }

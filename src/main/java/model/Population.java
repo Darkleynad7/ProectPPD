@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -19,6 +20,7 @@ public class Population {
     private List<Hour> hours;
 
     public Population(Integer populationSize, List<Hour> hours){
+        individuals = new ArrayList<>();
         while (populationSize > 0) {
             Collections.shuffle(hours);
             individuals.add(new Individual(hours));

@@ -2,31 +2,32 @@ package service;
 
 import model.Individual;
 import model.Population;
+import mpi.MPI;
 import repository.PopulationRepository;
 
 import javax.management.MBeanParameterInfo;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Service {
     private PopulationRepository populationRepository;
-    private Integer populationSize = 16;
-    private Float mutationProbability = 0.1F;
+    private Integer populationSize = 256;
+    private Float mutationProbability = 0.0F;
     private Float crossoverProbability = 0.8F;
     private List<Integer> fitnessOfPopulation;
     private Population population;
 
     public Service(){
         populationRepository = new PopulationRepository();
-        population = populationRepository.createPopulation(populationSize);
     }
 
     private Individual iteration(){
         population.evaluate();
-        List<Individual> parents = population.selection(populationSize/2);
+        List<Individual> parents = population.selection(populationSize*3/4);
         List<Individual> children = new ArrayList<>();
         for(int i = 0; i < parents.size(); i+=2){
             List<Individual> childs = parents.get(i).crossover(parents.get(i + 1), crossoverProbability);
@@ -79,25 +80,24 @@ public class Service {
         return population.selection(1).get(0);
     }
 
-    private Individual iterationMPI(String args[]){
-        return new Individual();
-    }
-
     public Individual solver(Integer noOfGenerations){
         Individual bestIndividual = null;
-        Integer bestFitness = 0;
+        Integer bestFitness = Integer.MIN_VALUE;
         for(int i = 0; i < noOfGenerations; i++){
             Individual localBestIndividual = iteration();
-            if(localBestIndividual.getFitness() > bestFitness){
+            if(localBestIndividual.getFitness() >= bestFitness){
                 bestIndividual = localBestIndividual;
                 bestFitness = localBestIndividual.getFitness();
             }
+            System.out.println(population.getIndividuals().size() + " " + localBestIndividual.getFitness());
         }
         return bestIndividual;
     }
 
     public void run(String path) throws FileNotFoundException {
         populationRepository.readInput(path);
-        System.out.println(solver(32));
+        population = populationRepository.createPopulation(populationSize);
+        Individual result = solver(32);
+        System.out.println(result.getFitness());
     }
 }
