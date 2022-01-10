@@ -42,8 +42,6 @@ public class Individual {
                     , h -> h <= hs.stream().map(Hour::getHours).max(Comparator.comparingInt(i -> i)).orElse(0)
                     , h -> h + 1);
 
-     Function<Gene, Integer> gaps = g ->
-             hours4teachers.apply(g).map(hs -> Sets.difference(hs.stream().collect(Collectors.toSet()), getIntervalBetweenMinAndMax.apply(hs).collect(Collectors.toSet()))
 
 
 
@@ -85,9 +83,6 @@ public class Individual {
 
     // INDIVIDUAL FUNCTIONS
 
-    public void fitness(){
-   geneList.stream().map(g -> if (overlappingClasses4groups.and(overlappingClasses4teachers).and(allGroupsStartAt8).test(g)) )
-    }
 
     // move hours
     public void mutate(Float mutationProbability) {
@@ -109,6 +104,10 @@ public class Individual {
        if (new Random().nextInt()%100 < crossoverProbability){
 
        }
+       return new ArrayList<>();
+    }
+
+    public void fitness() {
+       this.fitness = 0;
     }
 }
-V

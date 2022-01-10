@@ -15,7 +15,7 @@ public class Population {
     }
 
     public void evaluate(){
-        individuals.forEach(Individual::fitness);
+        individuals.forEach(i -> i.fitness());
     }
 
     public List<Integer> getFitnessForAll(){
