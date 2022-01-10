@@ -13,7 +13,7 @@ public class PopulationRepository {
     List<Hour> hours;
     List<Population> populations;
 
-    PopulationRepository(){
+    public PopulationRepository(){
         hours = new ArrayList<>();
         populations = new ArrayList<>();
     }

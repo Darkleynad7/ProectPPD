@@ -1,8 +1,6 @@
 package model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Comparator;
 import java.util.List;
@@ -26,8 +24,8 @@ public class Population {
                 .collect(Collectors.toList());
     }
 
-    public void selection(Integer newPopulationSize){
-        individuals = individuals.stream()
+    public List<Individual> selection(Integer newPopulationSize){
+        return individuals.stream()
                 .sorted(Comparator.comparingInt(Individual::getFitness))
                 .skip(individuals.size() - newPopulationSize)
                 .collect(Collectors.toList());
