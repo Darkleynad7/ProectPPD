@@ -10,6 +10,6 @@
         <module name="Proiect_PPD.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="15" />
+    <bytecodeTargetLevel target="16" />
   </component>
 </project>
