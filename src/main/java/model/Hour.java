@@ -8,8 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Hour {
-    private Professor professor;
     private Group group;
-    private Integer hours;
+    private Professor professor;
     private String subject;
+    private Integer hours;
+
+    public static Hour stringToHour(String line){
+        String[] parts = line.split(" - ");
+        return new Hour(new Group(parts[0]), new Professor(parts[1]), parts[2], Integer.parseInt(parts[3]));
+    }
 }

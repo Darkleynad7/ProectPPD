@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class Population {
     private List<Individual> individuals;
 
-    public Population(Integer populationSize){
+    public Population(Integer populationSize, List<Hour> hours){
 
     }
 
