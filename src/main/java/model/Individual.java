@@ -6,9 +6,7 @@ import com.google.common.collect.Streams;
 import lombok.*;
 
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -77,26 +75,38 @@ public class Individual {
 
 
     // CONSTRUCTOR
+
     Individual(List<Hour> hss) {
+        System.out.println();
+        System.out.println("CONSTRUCTOR CALLED: ");
+        System.out.println(hss);
+        System.out.println();
         geneList = Streams.zip
                         (split.apply(hss.stream(), hss.size() / 5)
                                 , Stream.of(DayType.MONDAY, DayType.TUESDAY, DayType.WEDNESDAY, DayType.THURSDAY, DayType.FRIDAY)
                                 , Gene::new
                         )
-                .map(g ->
-                        new Gene(Streams.zip
-                                (Stream.iterate(8, i -> i + 1)
-                                        , g.getHourList().stream()
-                                        , (i, h) -> Hour.builder()
-                                                .subject(h.getSubject())
-                                                .group(h.getGroup())
-                                                .professor(h.getProfessor())
-                                                .startingHour(i)
-                                                .build()
-                                ).collect(Collectors.toList())
-                                , g.dayType)
+                .map(g -> assignStartingHours.apply(g)
                 ).collect(Collectors.toList());
+        System.out.println(geneList);
     }
+
+    Function<Gene, Gene> assignStartingHours = gene ->
+            new Gene(gene.getHourList()
+                    .stream()
+                    .collect(Collectors.groupingBy(Hour::getGroup))
+                    .values()
+                    .stream()
+                    .flatMap(hs ->
+                            Streams.zip(Stream.iterate(8, i -> i + 1), hs.stream(), (i, h) ->
+                                    Hour.builder()
+                                    .subject(h.getSubject())
+                                    .group(h.getGroup())
+                                    .professor(h.getProfessor())
+                                    .startingHour(i)
+                                    .build()))
+                    .collect(Collectors.toList())
+            , gene.dayType);
 
 
     // INDIVIDUAL FUNCTIONS
@@ -119,9 +129,9 @@ public class Individual {
                 geneList.stream()
                         .map(g -> {
                             if (groupsThatStartAt8HaveGaps.test(g)) {
-                                return 1;
-                            } else {
                                 return 0;
+                            } else {
+                                return 1;
                             }
                         })
                         .reduce(0, Integer::sum);
@@ -133,7 +143,7 @@ public class Individual {
                         .reduce(0, Integer::sum);
 
         // fitness function
-        this.fitness = 20 * basicCharacteristicsScore - 5 * teacherGapScore + 10 * studentsGapScore;
+        this.fitness = 100*basicCharacteristicsScore + 10 * studentsGapScore - teacherGapScore;
     }
 
     public void mutate(Float mutationProbability) {
@@ -165,8 +175,20 @@ public class Individual {
         return List.of(this, other);
     }
 
+    Supplier<Stream<Group>> groups = () ->
+            geneList.stream().flatMap(g -> g.getHourList().stream()).collect(Collectors.groupingBy(Hour::getGroup)).keySet().stream();
+
     @Override
     public String toString() {
-
+        groups.get().forEach(group -> {
+            System.out.println();
+            System.out.println(group);
+            geneList.forEach(g -> {
+                System.out.println("dayType =");
+                System.out.println(g.dayType);
+                System.out.println(g.hourList.stream().filter(h -> (Objects.equals(h.getGroup().getIdentifier(), group.getIdentifier()))).collect(Collectors.toList()));
+            });
+        });
+        return "";
     }
 }

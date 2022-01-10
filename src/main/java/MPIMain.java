@@ -1,4 +1,4 @@
-import mpi.MPI;
+/*import mpi.MPI;
 
 import java.util.Arrays;
 
@@ -20,3 +20,4 @@ public class MPIMain {
         MPI.Finalize();
     }
 }
+*/

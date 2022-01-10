@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="230247b6-a5d5-4c1c-9833-a0e38902cd0f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/MPIMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/model/Population.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/model/Population.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/model/Individual.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/model/Individual.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/service/Service.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/service/Service.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Population.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Population.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MPIMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MPIMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Individual.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Individual.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/Service.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/input.in" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/input.in" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +25,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="betterResults" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="23W8hLTIc46e9ndCNJmVSmCI9eO" />

@@ -2,7 +2,7 @@ package service;
 
 import model.Individual;
 import model.Population;
-import mpi.MPI;
+// import mpi.MPI;
 import repository.PopulationRepository;
 
 import javax.management.MBeanParameterInfo;
@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 public class Service {
     private PopulationRepository populationRepository;
     private Integer populationSize = 256;
-    private Float mutationProbability = 0.0F;
+    private Float mutationProbability = 0.01F;
     private Float crossoverProbability = 0.8F;
     private List<Integer> fitnessOfPopulation;
     private Population population;
@@ -29,6 +29,9 @@ public class Service {
         population.evaluate();
         List<Individual> parents = population.selection(populationSize*3/4);
         List<Individual> children = new ArrayList<>();
+
+        // parents.get(0).toString();
+
         for(int i = 0; i < parents.size(); i+=2){
             List<Individual> childs = parents.get(i).crossover(parents.get(i + 1), crossoverProbability);
             if(childs != null) children.addAll(childs);
@@ -97,7 +100,8 @@ public class Service {
     public void run(String path) throws FileNotFoundException {
         populationRepository.readInput(path);
         population = populationRepository.createPopulation(populationSize);
-        Individual result = solver(32);
+        Individual result = solver(100);
+        result.toString();
         System.out.println(result.getFitness());
     }
 }
