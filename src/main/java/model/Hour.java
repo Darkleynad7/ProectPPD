@@ -13,8 +13,11 @@ public class Hour {
     private String subject;
     private Integer hours;
 
-    public static Hour stringToHour(String line){
-        String[] parts = line.split(" - ");
-        return new Hour(new Group(parts[0]), new Professor(parts[1]), parts[2], Integer.parseInt(parts[3]));
+    public static Hour stringToHour(String[] line){
+        Hour hour = new Hour();
+        hour.setGroup(new Group(line[0]));
+        hour.setProfessor(new Professor(line[1]));
+        hour.setSubject(line[2]);
+        return hour;
     }
 }

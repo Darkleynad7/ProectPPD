@@ -21,7 +21,9 @@ public class PopulationRepository {
     public void readInput(String path) throws FileNotFoundException {
         Scanner scanner = new Scanner(new File(path));
         while(scanner.hasNextLine()){
-            hours.add(Hour.stringToHour(scanner.nextLine()));
+            String[] parts = scanner.nextLine().split(" - ");
+            for(int i = 0; i < Integer.parseInt(parts[3]); i++)
+                hours.add(Hour.stringToHour(parts));
         }
     }
 

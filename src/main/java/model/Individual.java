@@ -99,12 +99,12 @@ public class Individual {
        }
     }
 
-    // excange hours
+    // exchange hours
     public List<Individual> crossover(Individual other, Float crossoverProbability){
        if (new Random().nextInt()%100 < crossoverProbability){
-
+           return new ArrayList<>();
        }
-       return new ArrayList<>();
+       return null;
     }
 
     public void fitness() {

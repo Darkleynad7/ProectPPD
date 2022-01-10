@@ -1,12 +1,14 @@
 package model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
+@NoArgsConstructor
 public class Population {
     private List<Individual> individuals;
 
@@ -15,7 +17,7 @@ public class Population {
     }
 
     public void evaluate(){
-        individuals.forEach(i -> i.fitness());
+        individuals.forEach(Individual::fitness);
     }
 
     public List<Integer> getFitnessForAll(){
