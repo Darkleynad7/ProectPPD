@@ -4,6 +4,7 @@ import model.Individual;
 import model.Population;
 import repository.PopulationRepository;
 
+import javax.management.MBeanParameterInfo;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,9 @@ import java.util.concurrent.Executors;
 
 public class Service {
     private PopulationRepository populationRepository;
-    private Integer populationSize;
-    private Float mutationProbability;
-    private Float crossoverProbability;
+    private Integer populationSize = 16;
+    private Float mutationProbability = 0.1F;
+    private Float crossoverProbability = 0.8F;
     private List<Integer> fitnessOfPopulation;
     private Population population;
 
@@ -78,6 +79,10 @@ public class Service {
         return population.selection(1).get(0);
     }
 
+    private Individual iterationMPI(String args[]){
+        return new Individual();
+    }
+
     public Individual solver(Integer noOfGenerations){
         Individual bestIndividual = null;
         Integer bestFitness = 0;
@@ -93,6 +98,6 @@ public class Service {
 
     public void run(String path) throws FileNotFoundException {
         populationRepository.readInput(path);
-        populationRepository.getHours().forEach(System.out::println);
+        System.out.println(solver(32));
     }
 }

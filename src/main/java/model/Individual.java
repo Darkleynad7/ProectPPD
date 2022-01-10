@@ -3,7 +3,9 @@ package model;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Streams;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -14,10 +16,11 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Individual {
     private List<Gene> geneList;
     private Integer fitness;
-
 
 
     // HELPER FUNCTIONS
@@ -38,76 +41,128 @@ public class Individual {
 
     Function<List<Hour>, Stream<Integer>> getIntervalBetweenMinAndMax = hs ->
             Stream.iterate
-                    ( hs.stream().map(Hour::getHours).min(Comparator.comparingInt(i -> i)).orElse(0)
-                    , h -> h <= hs.stream().map(Hour::getHours).max(Comparator.comparingInt(i -> i)).orElse(0)
-                    , h -> h + 1);
+                    (hs.stream().map(Hour::getStartingHour).min(Comparator.comparingInt(i -> i)).orElse(0)
+                            , h -> h <= hs.stream().map(Hour::getStartingHour).max(Comparator.comparingInt(i -> i)).orElse(0)
+                            , h -> h + 1);
 
-
+    Function<Gene, Integer> gaps4teachers = g ->
+            hours4teachers.apply(g).map(hs -> Sets.difference
+                                    (getIntervalBetweenMinAndMax.apply(hs).collect(Collectors.toSet())
+                                            , new HashSet<>(hs))
+                            .size())
+                    .reduce(0, Integer::sum);
 
 
     // PREDICATES
 
-   Predicate<Gene> allGroupsStartAt8           = g ->
-           hours4groups.apply(g).allMatch(hs ->
-                   hs.stream()
-                           .map(Hour::getHours)
-                           .min(Comparator.comparingInt(a -> a))
-                           .map(h -> h == 8)
-                           .orElse(false));
+    Predicate<Gene> allGroupsStartAt8 = g ->
+            hours4groups.apply(g).allMatch(hs ->
+                    hs.stream()
+                            .map(Hour::getStartingHour)
+                            .min(Comparator.comparingInt(a -> a))
+                            .map(h -> h == 8)
+                            .orElse(false));
 
-   Predicate<Gene> overlappingClasses4groups   = g ->
-           hours4groups.apply(g).anyMatch(hs -> hasDups.test(hs));
+    Predicate<Gene> overlappingClasses4groups = g ->
+            hours4groups.apply(g).anyMatch(hs -> hasDups.test(hs));
 
-   Predicate<Gene> overlappingClasses4teachers = g ->
-           hours4teachers.apply(g).anyMatch(hs -> hasDups.test(hs));
+    Predicate<Gene> overlappingClasses4teachers = g ->
+            hours4teachers.apply(g).anyMatch(hs -> hasDups.test(hs));
 
-   // only relevant if the groups start at 8
-   Predicate<Gene> groupsThatStartAt8HaveGaps = g ->
-           hours4groups.apply(g)
-           .map(hs -> hs.stream().map(Hour::getHours).collect(Collectors.toSet()))
-           .map(set -> Sets.difference(Stream.iterate(8, i -> i + 1).limit(set.size()).collect(Collectors.toSet()), set))
-           .anyMatch(set -> set.size() > 0);
+    // only relevant if the groups start at 8
+    Predicate<Gene> groupsThatStartAt8HaveGaps = g ->
+            hours4groups.apply(g)
+                    .map(hs -> hs.stream().map(Hour::getStartingHour).collect(Collectors.toSet()))
+                    .map(set -> Sets.difference(Stream.iterate(8, i -> i + 1).limit(set.size()).collect(Collectors.toSet()), set))
+                    .anyMatch(set -> set.size() > 0);
 
 
-
-   // CONSTRUCTOR
-   Individual(List<Hour> hss){
+    // CONSTRUCTOR
+    Individual(List<Hour> hss) {
         geneList = Streams.zip
-                        ( split.apply(hss.stream(), hss.size()/5)
-                        , Stream.of(DayType.MONDAY, DayType.TUESDAY, DayType.WEDNESDAY, DayType.THURSDAY, DayType.FRIDAY)
-                        , Gene::new
-                        ).collect(Collectors.toList());
+                        (split.apply(hss.stream(), hss.size() / 5)
+                                , Stream.of(DayType.MONDAY, DayType.TUESDAY, DayType.WEDNESDAY, DayType.THURSDAY, DayType.FRIDAY)
+                                , Gene::new
+                        )
+                .map(g ->
+                        new Gene(Streams.zip
+                                (Stream.iterate(8, i -> i + 1)
+                                        , g.getHourList().stream()
+                                        , (i, h) -> Hour.builder()
+                                                .subject(h.getSubject())
+                                                .group(h.getGroup())
+                                                .professor(h.getProfessor())
+                                                .startingHour(i)
+                                                .build()
+                                ).collect(Collectors.toList())
+                                , g.dayType)
+                ).collect(Collectors.toList());
     }
-
 
 
     // INDIVIDUAL FUNCTIONS
 
-
-    // move hours
-    public void mutate(Float mutationProbability) {
-       if (new Random().nextInt(100) < mutationProbability*100){
-           Random r = new Random();
-           Integer size = geneList.size();
-           Integer i = r.nextInt(size);
-           Gene g1 = geneList.get(i);
-           Gene g2 = geneList.get(size - i - 1);
-           g1.setHourList(Stream.concat(g1.getHourList().stream(), Stream.of(g2.getHourList().get(g2.getHourList().size() - 1))).collect(Collectors.toList()));
-           g2.setHourList(g2.getHourList().subList(0, g2.getHourList().size() - 1));
-           geneList.set(i, g2);
-           geneList.set(size - i - 1, g1);
-       }
-    }
-
-    // exchange hours
-    public List<Individual> crossover(Individual other, Float crossoverProbability){
-       if (new Random().nextInt()%100 < crossoverProbability){
-           return new ArrayList<>();
-       }
-       return null;
-    }
-
     public void fitness() {
-       this.fitness = 0;
+        Integer basicCharacteristicsScore =
+                geneList.stream()
+                        .map(g -> {
+                            if (overlappingClasses4groups.negate()
+                                    .and(overlappingClasses4teachers.negate())
+                                    .and(allGroupsStartAt8).test(g)) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        })
+                        .reduce(0, Integer::sum);
+
+        Integer studentsGapScore =
+                geneList.stream()
+                        .map(g -> {
+                            if (groupsThatStartAt8HaveGaps.test(g)) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        })
+                        .reduce(0, Integer::sum);
+
+
+        Integer teacherGapScore =
+                geneList.stream()
+                        .map(g -> gaps4teachers.apply(g))
+                        .reduce(0, Integer::sum);
+
+        // fitness function
+        this.fitness = 20 * basicCharacteristicsScore - 5 * teacherGapScore + 10 * studentsGapScore;
+    }
+
+    public void mutate(Float mutationProbability) {
+        if (new Random().nextInt(100) < mutationProbability * 100) {
+            Random r = new Random();
+            Integer size = geneList.size();
+            Integer i = r.nextInt(size);
+            Gene dayA = geneList.get(i);
+            Gene dayB = geneList.get(size - i - 1);
+            Hour hourA = dayA.hourList.get(0);
+            Hour hourB = dayB.hourList.get(0);
+
+            Integer aux = hourA.getStartingHour();
+            hourA.setStartingHour(hourB.getStartingHour());
+            hourB.setStartingHour(aux);
+
+            dayA.setHourList(Stream.concat(dayA.getHourList().subList(0, dayA.getHourList().size()).stream(), Stream.of(hourB)).collect(Collectors.toList()));
+            dayB.setHourList(Stream.concat(dayB.getHourList().subList(0, dayB.getHourList().size()).stream(), Stream.of(hourA)).collect(Collectors.toList()));
+
+            geneList.set(i, dayA);
+            geneList.set(size - i - 1, dayB);
+        }
+    }
+
+    public List<Individual> crossover(Individual other, Float crossoverProbability) {
+        if (new Random().nextInt(100) < crossoverProbability * 100) {
+            // pass
+        }
+        return List.of(this, other);
     }
 }
