@@ -5,18 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="230247b6-a5d5-4c1c-9833-a0e38902cd0f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/repository/PopulationRepositoryCopy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/MPIMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/MPIMain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/model/Gene.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/model/Gene.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/model/Individual.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/model/Individual.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/service/Service.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/service/Service.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/MPIMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MPIMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Gene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Gene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Group.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Group.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Hour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Hour.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/Individual.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Individual.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Professor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Professor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/Service.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,7 +25,20 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="betterResults" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="23W8hLTIc46e9ndCNJmVSmCI9eO" />
   <component name="ProjectViewState">
@@ -92,6 +98,14 @@
       <workItem from="1641838602057" duration="956000" />
       <workItem from="1641839582876" duration="13175000" />
     </task>
+    <task id="LOCAL-00001" summary="fix some issues">
+      <created>1641848819741</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1641848819741</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -108,5 +122,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix some issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix some issues" />
   </component>
 </project>

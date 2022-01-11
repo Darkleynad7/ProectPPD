@@ -1,7 +1,10 @@
+
+
 import model.Individual;
 import model.Population;
 import mpi.MPI;
 import repository.PopulationRepositoryCopy;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
