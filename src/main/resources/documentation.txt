@@ -1,0 +1,52 @@
+Algorithm
+We have implemented an evolutionary algorithm for determining a desirable
+timetable for multiple groups of students.
+
+The input for this algorithm is a set of classes which contain
+information about the group, teacher, subject and starting hour
+
+The initial population will be randomly generated in the following way:
+   - take the list of classes
+   - shuffle it
+   - split it into multiple parts for each day of the week
+   - assign hours starting from 8 independently for each of the groups
+   - individual is created from those classes
+
+The way we mutate an individual is by swapping two classes from different
+days.
+
+An individual is a potential solution to the problem, meaning a complete
+timetable.
+
+The genes are a set of classes, for multiple groups and independent of each other
+
+The selection process is based on a fitness function whose value is based on a few
+characteristics: how many gaps there are for each group of students,
+all groups starting at 8, overlapping classes for both students and teachers
+
+We run multiple generations of the population, during each one of them
+we select the best set of individuals based on the value of their fitness function
+
+The input is read for a file
+
+No synchronization was needed due to working on decoupled chunks of data
+
+32 generations:
+Iterative: 2408
+ThreadPool: 1476
+MPI: 4453
+
+64 generations:
+Iterative: 4253
+ThreadPool: 2324
+MPI: 4318
+
+128 generations:
+Iterative: 8465
+ThreadPool: 3920
+MPI: 4343
+
+256 generations:
+Iterative: 16197
+ThreadPool: 7717
+MPI: 4681

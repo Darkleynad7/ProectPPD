@@ -1,5 +1,6 @@
 package service;
 
+import model.DayType;
 import model.Individual;
 import model.Population;
 // import mpi.MPI;
@@ -9,6 +10,7 @@ import javax.management.MBeanParameterInfo;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -126,7 +128,7 @@ public class Service {
         Individual bestIndividual = null;
         Integer bestFitness = Integer.MIN_VALUE;
         for(int i = 0; i < noOfGenerations; i++){
-            Individual localBestIndividual = iterationThreadPool();
+            Individual localBestIndividual = iteration();
             if(localBestIndividual.getFitness() >= bestFitness){
                 bestIndividual = localBestIndividual;
                 bestFitness = localBestIndividual.getFitness();
@@ -139,8 +141,11 @@ public class Service {
     public void run(String path) throws FileNotFoundException {
         populationRepository.readInput(path);
         population = populationRepository.createPopulation(populationSize);
-        Individual result = solver(100);
+        Date start = new Date();
+        Individual result = solver(64);
+        Date finish = new Date();
         result.toString();
         System.out.println(result.getFitness());
+        System.out.println("Time = " + (finish.getTime() - start.getTime()));
     }
 }

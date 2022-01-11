@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="230247b6-a5d5-4c1c-9833-a0e38902cd0f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/documentation.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/MPIMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/MPIMain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/model/Individual.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/model/Individual.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/service/Service.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/service/Service.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Individual.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Individual.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MPIMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MPIMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/Service.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,7 +57,7 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
   </component>
-  <component name="RunManager" selected="Application.MPIMain">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="MPIMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <envs>
         <env name="MPJ_HOME" value="C:\mpj\mpj-v0_44" />
@@ -82,8 +82,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.MPIMain" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.MPIMain" />
       </list>
     </recent_temporary>
   </component>

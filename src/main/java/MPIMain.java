@@ -1,13 +1,10 @@
-
-
 import model.Individual;
 import model.Population;
 import mpi.MPI;
 import repository.PopulationRepositoryCopy;
-
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,14 +13,18 @@ public class MPIMain {
     private static final Integer populationSize = 256;
     private static final Float mutationProbability = 0.04F;
     private static final Float crossoverProbability = 0.8F;
-    private static Integer noOfGenerations = 32;
+    private static Integer noOfGenerations = 256;
     private static final Population population = populationRepository.createPopulation(populationSize);
     private static Individual bestIndividual;
     private static Integer bestFitness = Integer.MIN_VALUE;
+    private static Date start;
+    private static Date finish;
     public static void main(String[] args) {
 
         MPI.Init(args);
         String[] individuals = population.getIndividuals().stream().map(Individual::modelToString).toArray(String[]::new);
+
+        if(MPI.COMM_WORLD.Rank() == 0)start = new Date();
 
         String[] receivedIndividuals = new String[populationSize/4];
         while(noOfGenerations > 0)
@@ -72,6 +73,11 @@ public class MPIMain {
 
                 individuals = population.getIndividuals().stream().map(Individual::modelToString).toArray(String[]::new);
             }
+        }
+
+        if(MPI.COMM_WORLD.Rank() == 0){
+            finish = new Date();
+            System.out.println("Time = " + (finish.getTime() - start.getTime()));
         }
 
         MPI.Finalize();
