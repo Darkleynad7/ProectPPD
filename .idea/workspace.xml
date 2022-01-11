@@ -5,13 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="230247b6-a5d5-4c1c-9833-a0e38902cd0f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/MPIMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/repository/PopulationRepositoryCopy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/model/Population.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/model/Population.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/MPIMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/MPIMain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/model/Gene.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/model/Gene.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/model/Individual.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/model/Individual.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/service/Service.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/service/Service.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Population.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Population.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MPIMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MPIMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Gene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Gene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Group.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Group.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Hour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Hour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Individual.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Individual.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Professor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Professor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/Service.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/input.in" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/input.in" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +51,7 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.MPIMain">
     <configuration name="MPIMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <envs>
         <env name="MPJ_HOME" value="C:\mpj\mpj-v0_44" />
@@ -70,8 +76,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.MPIMain" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -84,7 +90,7 @@
       <option name="presentableId" value="Default" />
       <updated>1641838600726</updated>
       <workItem from="1641838602057" duration="956000" />
-      <workItem from="1641839582876" duration="1726000" />
+      <workItem from="1641839582876" duration="13175000" />
     </task>
     <servers />
   </component>

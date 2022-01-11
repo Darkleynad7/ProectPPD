@@ -15,9 +15,10 @@ import java.util.stream.StreamSupport;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class Individual {
+public class Individual{
     private List<Gene> geneList;
     private Integer fitness;
 
@@ -76,6 +77,7 @@ public class Individual {
                     .anyMatch(set -> set.size() > 0);
 
 
+
     // CONSTRUCTOR
     Individual(List<Hour> hss) {
         geneList = Streams.zip
@@ -96,6 +98,11 @@ public class Individual {
                                 ).collect(Collectors.toList())
                                 , g.dayType)
                 ).collect(Collectors.toList());
+    }
+
+    public Individual(List<Gene> genes, Integer fitness) {
+        geneList = genes;
+        this.fitness = fitness;
     }
 
 
@@ -158,15 +165,28 @@ public class Individual {
         }
     }
 
+    public static String modelToString(Individual individual){
+        String string = "";
+        for(Gene gene: individual.geneList){
+            string += Gene.modelToString(gene) + "\n***";
+        }
+        string += "\n" + (individual.fitness == null ? 0 : individual.fitness);
+        return string;
+    }
+
+    public static Individual stringToModel(String string){
+        String[] parts = string.split("\\*\\*\\*");
+        Integer fitness = Integer.valueOf(parts[parts.length - 1].strip());
+        parts = Arrays.copyOf(parts, parts.length - 1);
+        List<Gene> genes = Arrays.stream(parts).map(Gene::stringToModel).collect(Collectors.toList());
+        return new Individual(genes, fitness);
+
+    }
+
     public List<Individual> crossover(Individual other, Float crossoverProbability) {
         if (new Random().nextInt(100) < crossoverProbability * 100) {
             // pass
         }
         return List.of(this, other);
-    }
-
-    @Override
-    public String toString() {
-
     }
 }

@@ -84,7 +84,7 @@ public class Service {
         Individual bestIndividual = null;
         Integer bestFitness = Integer.MIN_VALUE;
         for(int i = 0; i < noOfGenerations; i++){
-            Individual localBestIndividual = iteration();
+            Individual localBestIndividual = iterationThreadPool();
             if(localBestIndividual.getFitness() >= bestFitness){
                 bestIndividual = localBestIndividual;
                 bestFitness = localBestIndividual.getFitness();
