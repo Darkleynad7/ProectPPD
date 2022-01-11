@@ -26,10 +26,10 @@ public class Individual {
             StreamSupport.stream(Iterables.partition(ss.collect(Collectors.toList()), k).spliterator(), false);
 
     Function<Gene, Stream<List<Hour>>> hours4groups = g ->
-            g.getHourList().stream().collect(Collectors.groupingBy(Hour::getGroup)).values().stream();
+            g.getHourList().stream().collect(Collectors.groupingBy(h -> h.getGroup().getIdentifier())).values().stream();
 
     Function<Gene, Stream<List<Hour>>> hours4teachers = g ->
-            g.getHourList().stream().collect(Collectors.groupingBy(Hour::getProfessor)).values().stream();
+            g.getHourList().stream().collect(Collectors.groupingBy(h -> h.getProfessor().getName())).values().stream();
 
     Predicate<List<Hour>> hasDups = hs ->
             hs.stream()
@@ -94,7 +94,7 @@ public class Individual {
     Function<Gene, Gene> assignStartingHours = gene ->
             new Gene(gene.getHourList()
                     .stream()
-                    .collect(Collectors.groupingBy(Hour::getGroup))
+                    .collect(Collectors.groupingBy(h -> h.getGroup().getIdentifier()))
                     .values()
                     .stream()
                     .flatMap(hs ->
@@ -143,28 +143,53 @@ public class Individual {
                         .reduce(0, Integer::sum);
 
         // fitness function
-        this.fitness = 100*basicCharacteristicsScore + 10 * studentsGapScore - teacherGapScore;
+        this.fitness = 10 * basicCharacteristicsScore + 5 * studentsGapScore - teacherGapScore;
     }
 
     public void mutate(Float mutationProbability) {
         if (new Random().nextInt(100) < mutationProbability * 100) {
-            Random r = new Random();
-            Integer size = geneList.size();
-            Integer i = r.nextInt(size);
-            Gene dayA = geneList.get(i);
-            Gene dayB = geneList.get(size - i - 1);
-            Hour hourA = dayA.hourList.get(0);
-            Hour hourB = dayB.hourList.get(0);
+            if(true) {
+                // two hours get swapped
+                Random r = new Random();
+                Integer size = geneList.size();
+                Integer pos1 = r.nextInt(size);
+                Integer pos2 = r.nextInt(size);
 
-            Integer aux = hourA.getStartingHour();
-            hourA.setStartingHour(hourB.getStartingHour());
-            hourB.setStartingHour(aux);
+                Gene dayA = geneList.get(pos1);
+                Gene dayB = geneList.get(pos2);
 
-            dayA.setHourList(Stream.concat(dayA.getHourList().subList(0, dayA.getHourList().size()).stream(), Stream.of(hourB)).collect(Collectors.toList()));
-            dayB.setHourList(Stream.concat(dayB.getHourList().subList(0, dayB.getHourList().size()).stream(), Stream.of(hourA)).collect(Collectors.toList()));
+                Hour hourA = dayA.hourList.get(dayA.hourList.size() - 1);
+                Hour hourB = dayB.hourList.get(dayB.hourList.size() - 1);
 
-            geneList.set(i, dayA);
-            geneList.set(size - i - 1, dayB);
+                Integer aux = hourA.getStartingHour();
+                hourA.setStartingHour(hourB.getStartingHour());
+                hourB.setStartingHour(aux);
+
+                dayA.setHourList(Stream.concat(dayA.getHourList().subList(0, dayA.getHourList().size() - 1).stream(), Stream.of(hourB)).collect(Collectors.toList()));
+                dayB.setHourList(Stream.concat(dayB.getHourList().subList(0, dayB.getHourList().size() - 1).stream(), Stream.of(hourA)).collect(Collectors.toList()));
+
+                geneList.set(pos1, dayA);
+                geneList.set(pos2, dayB);
+            }else{
+                // move one class around
+                Random r = new Random();
+                Integer size = geneList.size();
+                Integer pos1 = r.nextInt(size);
+                Integer pos2 = r.nextInt(size);
+
+                Gene dayA = geneList.get(pos1);
+                Gene dayB = geneList.get(pos2);
+
+                if(dayA.getHourList().size() > 1){
+                    Hour hourA = dayA.hourList.get(dayA.hourList.size() - 1);
+
+                    dayA.setHourList(dayA.getHourList().subList(0, dayA.getHourList().size() - 1));
+                    dayB.setHourList(Stream.concat(dayB.getHourList().stream(), Stream.of(hourA)).collect(Collectors.toList()));
+
+                    geneList.set(pos1, dayA);
+                    geneList.set(pos2, dayB);
+                }
+            }
         }
     }
 
@@ -175,8 +200,8 @@ public class Individual {
         return List.of(this, other);
     }
 
-    Supplier<Stream<Group>> groups = () ->
-            geneList.stream().flatMap(g -> g.getHourList().stream()).collect(Collectors.groupingBy(Hour::getGroup)).keySet().stream();
+    Supplier<Stream<String>> groups = () ->
+            geneList.stream().flatMap(g -> g.getHourList().stream()).collect(Collectors.groupingBy(h -> h.getGroup().getIdentifier())).keySet().stream();
 
     @Override
     public String toString() {
@@ -186,7 +211,7 @@ public class Individual {
             geneList.forEach(g -> {
                 System.out.println("dayType =");
                 System.out.println(g.dayType);
-                System.out.println(g.hourList.stream().filter(h -> (Objects.equals(h.getGroup().getIdentifier(), group.getIdentifier()))).collect(Collectors.toList()));
+                System.out.println(g.hourList.stream().filter(h -> (Objects.equals(h.getGroup().getIdentifier(), group))).collect(Collectors.toList()));
             });
         });
         return "";

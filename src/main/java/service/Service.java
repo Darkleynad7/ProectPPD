@@ -13,6 +13,45 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
+/*
+* Algorighm
+* We have implemented an evolutionary algorithm for determining a desirable
+* timetable for multiple groups of students.
+*
+* The input for this algorithm is a set of classes which contain
+* information about the group, teacher, subject and starting hour
+*
+* The initial population will be randomly generated in the following way:
+*    - take the list of classes
+*    - shuffle it
+*    - split it into multiple parts for each day of the week
+*    - assign hours starting from 8 independently for each of the groups
+*    - individual is created from those classes
+*
+* The way we mutate an individual is by swapping two classes from different
+* days.
+*
+* An individual is a potential solution to the problem, meaning a complete
+* timetable.
+*
+* The genes are a set of classes, for multiple groups and independent of each other
+*
+* The selection process is based on a fitness function whose value is based on a few
+* characteristics: how many gaps there are for each group of students,
+* all groups starting at 8, overlapping classes for both students and teachers
+*
+* We run multiple generations of the population, during each one of them
+* we select the best set of individuals based on the value of their fitness function
+*
+* The input is read for a file
+*
+* No synchronization was needed due to working on decoupled chunks of data
+*
+*
+* */
+
+
 public class Service {
     private PopulationRepository populationRepository;
     private Integer populationSize = 256;
@@ -57,7 +96,7 @@ public class Service {
             populationParts.add(population);
             runnables.add(() -> {
                 population.evaluate();
-                List<Individual> parents = population.selection(populationSize/8);
+                List<Individual> parents = population.selection(populationSize/4*3/4);
                 List<Individual> children = new ArrayList<>();
                 for(int j = 0; j < parents.size(); j+=2){
                     List<Individual> childs = parents.get(j).crossover(parents.get(j + 1), crossoverProbability);
@@ -87,7 +126,7 @@ public class Service {
         Individual bestIndividual = null;
         Integer bestFitness = Integer.MIN_VALUE;
         for(int i = 0; i < noOfGenerations; i++){
-            Individual localBestIndividual = iteration();
+            Individual localBestIndividual = iterationThreadPool();
             if(localBestIndividual.getFitness() >= bestFitness){
                 bestIndividual = localBestIndividual;
                 bestFitness = localBestIndividual.getFitness();
