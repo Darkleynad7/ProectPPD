@@ -34,6 +34,7 @@ public class Individual{
 
     Predicate<List<Hour>> hasDups = hs ->
             hs.stream()
+                    .map(Hour::getStartingHour)
                     .filter(i -> Collections.frequency(hs, i) > 1)
                     .collect(Collectors.toSet()).size() > 0;
 
@@ -43,12 +44,17 @@ public class Individual{
                             , h -> h <= hs.stream().map(Hour::getStartingHour).max(Comparator.comparingInt(i -> i)).orElse(0)
                             , h -> h + 1);
 
-    Function<Gene, Integer> gaps4teachers = g ->
-            hours4teachers.apply(g).map(hs -> Sets.difference
+    BiFunction<Gene, Function<Gene, Stream<List<Hour>>>, Integer> gaps = (g, f) ->
+            f.apply(g).map(hs -> Sets.difference
                                     (getIntervalBetweenMinAndMax.apply(hs).collect(Collectors.toSet())
                                             , new HashSet<>(hs))
                             .size())
                     .reduce(0, Integer::sum);
+
+    Function<Gene, Integer> gaps4students = g -> gaps.apply(g, hours4groups);
+
+    Function<Gene, Integer> gaps4teachers = g -> gaps.apply(g, hours4teachers);
+
 
 
     // PREDICATES
@@ -66,13 +72,6 @@ public class Individual{
 
     Predicate<Gene> overlappingClasses4teachers = g ->
             hours4teachers.apply(g).anyMatch(hs -> hasDups.test(hs));
-
-    // only relevant if the groups start at 8
-    Predicate<Gene> groupsThatStartAt8HaveGaps = g ->
-            hours4groups.apply(g)
-                    .map(hs -> hs.stream().map(Hour::getStartingHour).collect(Collectors.toSet()))
-                    .map(set -> Sets.difference(Stream.iterate(8, i -> i + 1).limit(set.size()).collect(Collectors.toSet()), set))
-                    .anyMatch(set -> set.size() > 0);
 
 
 
@@ -93,6 +92,12 @@ public class Individual{
         geneList = genes;
         this.fitness = fitness;
     }
+
+    Function<Gene, Integer> latestHour = gene ->
+            gene.getHourList().stream()
+                    .max(Comparator.comparingInt(Hour::getStartingHour))
+                    .map(Hour::getStartingHour)
+                    .orElse(0);
 
     Function<Gene, Gene> assignStartingHours = gene ->
             new Gene(gene.getHourList()
@@ -116,51 +121,52 @@ public class Individual{
     // INDIVIDUAL FUNCTIONS
 
     public void fitness() {
-        Integer basicCharacteristicsScore =
+        // 5
+        Supplier<Integer> basicCharacteristicsScore = () ->
+        {
+            if (geneList.stream()
+                    .allMatch(g -> overlappingClasses4groups.negate()
+                            .and(overlappingClasses4teachers.negate())
+                            .and(allGroupsStartAt8).test(g))) {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
+
+        // -80
+        Supplier<Integer> studentsGapScore = () ->
                 geneList.stream()
-                        .map(g -> {
-                            if (overlappingClasses4groups.negate()
-                                    .and(overlappingClasses4teachers.negate())
-                                    .and(allGroupsStartAt8).test(g)) {
-                                return 1;
-                            } else {
-                                return 0;
-                            }
-                        })
+                        .map(g -> gaps4students.apply(g))
                         .reduce(0, Integer::sum);
 
-        Integer studentsGapScore =
-                geneList.stream()
-                        .map(g -> {
-                            if (groupsThatStartAt8HaveGaps.test(g)) {
-                                return 0;
-                            } else {
-                                return 1;
-                            }
-                        })
-                        .reduce(0, Integer::sum);
-
-
-        Integer teacherGapScore =
+        // -70
+        Supplier<Integer> teacherGapScore = () ->
                 geneList.stream()
                         .map(g -> gaps4teachers.apply(g))
                         .reduce(0, Integer::sum);
 
+        // 10
+        Supplier<Integer> latestHourForEveryWeek = () ->
+                geneList.stream()
+                        .map(g -> latestHour.apply(g))
+                        .map(lh -> lh - 14)
+                        .reduce(0, Integer::sum);
+
         // fitness function
-        this.fitness = 10 * basicCharacteristicsScore + 5 * studentsGapScore - teacherGapScore;
+        this.fitness = 1000 * basicCharacteristicsScore.get() - teacherGapScore.get() - latestHourForEveryWeek.get() - 5 * studentsGapScore.get();
     }
 
-    public void mutate(Float mutationProbability) {
-        if (new Random().nextInt(100) < mutationProbability * 100) {
-            if(true) {
+    public void mutate(Float mutationProbability, Random r) {
+        if (r.nextInt(100) < mutationProbability * 100) {
+            // System.out.println("MUTATION");
+            Integer size = geneList.size();
+            Integer pos1 = r.nextInt(size);
+            Integer pos2 = r.nextInt(size);
+            Gene dayA = geneList.get(pos1);
+            Gene dayB = geneList.get(pos2);
+            if(r.nextInt()%2 == 0) {
                 // two hours get swapped
-                Random r = new Random();
-                Integer size = geneList.size();
-                Integer pos1 = r.nextInt(size);
-                Integer pos2 = r.nextInt(size);
-
-                Gene dayA = geneList.get(pos1);
-                Gene dayB = geneList.get(pos2);
 
                 Hour hourA = dayA.hourList.get(dayA.hourList.size() - 1);
                 Hour hourB = dayB.hourList.get(dayB.hourList.size() - 1);
@@ -176,13 +182,6 @@ public class Individual{
                 geneList.set(pos2, dayB);
             }else{
                 // move one class around
-                Random r = new Random();
-                Integer size = geneList.size();
-                Integer pos1 = r.nextInt(size);
-                Integer pos2 = r.nextInt(size);
-
-                Gene dayA = geneList.get(pos1);
-                Gene dayB = geneList.get(pos2);
 
                 if(dayA.getHourList().size() > 1){
                     Hour hourA = dayA.hourList.get(dayA.hourList.size() - 1);
@@ -195,6 +194,41 @@ public class Individual{
                 }
             }
         }
+    }
+
+    Function<Hour, Hour> deepCopyHour = h -> Hour.builder().startingHour(h.getStartingHour()).group(h.getGroup()).professor(h.getProfessor()).subject(h.getSubject()).build();
+
+    Function<Gene, Gene> deepCopyGene = g -> Gene.builder().dayType(g.getDayType()).hourList(g.getHourList().stream().map(h -> deepCopyHour.apply(h)).collect(Collectors.toList())).build();
+
+    Function<Individual, Individual> deepCopyIndividual = ind ->
+    {
+        Individual newind = new Individual();
+        newind.geneList = ind.geneList.stream().map(g -> deepCopyGene.apply(g)).collect(Collectors.toList());
+        return newind;
+    };
+
+    public List<Individual> crossover(Individual other, Float crossoverProbability) {
+        if (new Random().nextInt(100) < crossoverProbability * 100) {
+            // pass
+        }
+        return List.of(deepCopyIndividual.apply(this), deepCopyIndividual.apply(other));
+    }
+
+    Supplier<Stream<String>> groups = () ->
+            geneList.stream().flatMap(g -> g.getHourList().stream()).collect(Collectors.groupingBy(h -> h.getGroup().getIdentifier())).keySet().stream();
+
+    @Override
+    public String toString() {
+        groups.get().forEach(group -> {
+            System.out.println();
+            System.out.println(group);
+            geneList.forEach(g -> {
+                System.out.println("dayType =");
+                System.out.println(g.dayType);
+                System.out.println(g.hourList.stream().filter(h -> (Objects.equals(h.getGroup().getIdentifier(), group))).collect(Collectors.toList()));
+            });
+        });
+        return "";
     }
 
     public static String modelToString(Individual individual){
@@ -213,30 +247,5 @@ public class Individual{
         List<Gene> genes = Arrays.stream(parts).map(Gene::stringToModel).collect(Collectors.toList());
         return new Individual(genes, fitness);
 
-    }
-
-    public List<Individual> crossover(Individual other, Float crossoverProbability) {
-        if (new Random().nextInt(100) < crossoverProbability * 100) {
-            // pass
-        }
-        return List.of(this, other);
-    }
-
-
-    Supplier<Stream<String>> groups = () ->
-            geneList.stream().flatMap(g -> g.getHourList().stream()).collect(Collectors.groupingBy(h -> h.getGroup().getIdentifier())).keySet().stream();
-
-    @Override
-    public String toString() {
-        groups.get().forEach(group -> {
-            System.out.println();
-            System.out.println(group);
-            geneList.forEach(g -> {
-                System.out.println("dayType =");
-                System.out.println(g.dayType);
-                System.out.println(g.hourList.stream().filter(h -> (Objects.equals(h.getGroup().getIdentifier(), group))).collect(Collectors.toList()));
-            });
-        });
-        return "";
     }
 }

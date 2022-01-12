@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="230247b6-a5d5-4c1c-9833-a0e38902cd0f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/documentation.txt" afterDir="false" />
+    <list default="true" id="230247b6-a5d5-4c1c-9833-a0e38902cd0f" name="Changes" comment="fix some issues">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/MPIMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/MPIMain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Proiect PPD/service/Service.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Proiect PPD/service/Service.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MPIMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MPIMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Gene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Gene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Individual.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Individual.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/documentation.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/documentation.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +57,7 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.MPIMain">
     <configuration name="MPIMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <envs>
         <env name="MPJ_HOME" value="C:\mpj\mpj-v0_44" />
@@ -82,8 +82,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.MPIMain" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -97,6 +97,8 @@
       <updated>1641838600726</updated>
       <workItem from="1641838602057" duration="956000" />
       <workItem from="1641839582876" duration="13175000" />
+      <workItem from="1641935833420" duration="32000" />
+      <workItem from="1641971586824" duration="3108000" />
     </task>
     <task id="LOCAL-00001" summary="fix some issues">
       <created>1641848819741</created>

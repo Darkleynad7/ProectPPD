@@ -1,52 +1,65 @@
-Algorithm
-We have implemented an evolutionary algorithm for determining a desirable
-timetable for multiple groups of students.
-
-The input for this algorithm is a set of classes which contain
-information about the group, teacher, subject and starting hour
-
-The initial population will be randomly generated in the following way:
-   - take the list of classes
-   - shuffle it
-   - split it into multiple parts for each day of the week
-   - assign hours starting from 8 independently for each of the groups
-   - individual is created from those classes
-
-The way we mutate an individual is by swapping two classes from different
-days.
-
-An individual is a potential solution to the problem, meaning a complete
-timetable.
-
-The genes are a set of classes, for multiple groups and independent of each other
-
-The selection process is based on a fitness function whose value is based on a few
-characteristics: how many gaps there are for each group of students,
-all groups starting at 8, overlapping classes for both students and teachers
-
-We run multiple generations of the population, during each one of them
-we select the best set of individuals based on the value of their fitness function
-
-The input is read for a file
-
-No synchronization was needed due to working on decoupled chunks of data
+/*
+* Algorighm
+* We have implemented an evolutionary algorithm for determining a desirable
+* timetable for multiple groups of students.
+*
+* The input for this algorithm is a set of classes which contain
+* information about the group, teacher, subject and starting hour
+*
+* The initial population will be randomly generated in the following way:
+*    - take the list of classes
+*    - shuffle it
+*    - split it into multiple parts for each day of the week
+*    - assign hours starting from 8 independently for each of the groups
+*    - individual is created from those classes
+*
+* The way we mutate an individual is by swapping two classes from different
+* days.
+*
+* An individual is a potential solution to the problem, meaning a complete
+* timetable.
+*
+* The genes are a set of classes, for multiple groups and independent of each other
+*
+* The selection process is based on a fitness function whose value is based on a few
+* characteristics: how many gaps there are for each group of students,
+* all groups starting at 8, overlapping classes for both students and teachers
+*
+* We run multiple generations of the population, during each one of them
+* we select the best set of individuals based on the value of their fitness function
+*
+* The input is read for a file
+*
+* We have 3 implementation for the algorithm, a sequential iteration, a thread pool iteration and an MPI operation
+*
+* The sequential iteration goes in order to all the individual in a population for and epoch
+*
+* The thread pool iteration splits the population in 4 and then assigns the 4 chunks of data to 4 threads. After the threads
+* finish executing the program recombines the population and returns the no1 individual for the entire population
+*
+* The MPI iteration transforms the List of individuals into a list of strings and with scatter it splits the list to 4 processes
+* After each epoch the algorithm combines the individuals back in one population using Gather and remembers the best individual
+*
+* No synchronization was needed due to working on decoupled chunks of data
+*
+* */
 
 32 generations:
 Iterative: 2408
 ThreadPool: 1476
-MPI: 4453
+MPI: 3059
 
 64 generations:
 Iterative: 4253
 ThreadPool: 2324
-MPI: 4318
+MPI: 5185
 
 128 generations:
 Iterative: 8465
 ThreadPool: 3920
-MPI: 4343
+MPI: 9278
 
 256 generations:
 Iterative: 16197
 ThreadPool: 7717
-MPI: 4681
+MPI: 17473

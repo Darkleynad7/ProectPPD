@@ -8,10 +8,7 @@ import repository.PopulationRepository;
 
 import javax.management.MBeanParameterInfo;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -78,7 +75,7 @@ public class Service {
             if(childs != null) children.addAll(childs);
         }
 
-        children.forEach(c -> c.mutate(mutationProbability));
+        children.forEach(c -> c.mutate(mutationProbability, new Random()));
         parents.addAll(children);
         population.setIndividuals(parents);
         population.evaluate();
@@ -105,7 +102,7 @@ public class Service {
                     if(childs != null) children.addAll(childs);
                 }
 
-                children.forEach(c -> c.mutate(mutationProbability));
+                children.forEach(c -> c.mutate(mutationProbability, new Random()));
                 parents.addAll(children);
                 population.setIndividuals(parents);
                 population.evaluate();
@@ -128,7 +125,7 @@ public class Service {
         Individual bestIndividual = null;
         Integer bestFitness = Integer.MIN_VALUE;
         for(int i = 0; i < noOfGenerations; i++){
-            Individual localBestIndividual = iteration();
+            Individual localBestIndividual = iterationThreadPool();
             if(localBestIndividual.getFitness() >= bestFitness){
                 bestIndividual = localBestIndividual;
                 bestFitness = localBestIndividual.getFitness();
@@ -142,7 +139,7 @@ public class Service {
         populationRepository.readInput(path);
         population = populationRepository.createPopulation(populationSize);
         Date start = new Date();
-        Individual result = solver(64);
+        Individual result = solver(128);
         Date finish = new Date();
         result.toString();
         System.out.println(result.getFitness());

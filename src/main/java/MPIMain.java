@@ -2,10 +2,8 @@ import model.Individual;
 import model.Population;
 import mpi.MPI;
 import repository.PopulationRepositoryCopy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MPIMain {
@@ -13,7 +11,7 @@ public class MPIMain {
     private static final Integer populationSize = 256;
     private static final Float mutationProbability = 0.04F;
     private static final Float crossoverProbability = 0.8F;
-    private static Integer noOfGenerations = 256;
+    private static Integer noOfGenerations = 128;
     private static final Population population = populationRepository.createPopulation(populationSize);
     private static Individual bestIndividual;
     private static Integer bestFitness = Integer.MIN_VALUE;
@@ -47,7 +45,7 @@ public class MPIMain {
                 if(childs != null) children.addAll(childs);
             }
 
-            children.forEach(c -> c.mutate(mutationProbability));
+            children.forEach(c -> c.mutate(mutationProbability, new Random()));
             parents.addAll(children);
             localPopulation.setIndividuals(parents);
             localPopulation.evaluate();
@@ -77,6 +75,7 @@ public class MPIMain {
 
         if(MPI.COMM_WORLD.Rank() == 0){
             finish = new Date();
+            System.out.println(Individual.modelToString(bestIndividual));
             System.out.println("Time = " + (finish.getTime() - start.getTime()));
         }
 
